@@ -44,18 +44,18 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-		Toolbar toolbar = findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-		FloatingActionButton fab = findViewById(R.id.fab);
-		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SaveTodoActivity.class);
                 intent.putExtra(Constant.KEY_REQUEST_CODE, Constant.ADD_TODO);
                 startActivityForResult(intent, Constant.ADD_TODO);
-			}
-		});
+            }
+        });
         session = Application.provideSession();
         if (!session.isLogin()) {
             Intent intent = new Intent(this, LoginActivity.class);
@@ -107,6 +107,13 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        else if (id == R.id.action_logout) {
+            session.removeSession();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
             return true;
         }
 

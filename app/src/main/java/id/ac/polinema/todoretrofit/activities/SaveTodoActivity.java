@@ -74,7 +74,13 @@ public class SaveTodoActivity extends AppCompatActivity {
     }
 
     private void handleUpdate(View view) {
-        Call<Envelope<Todo>> updateTodo = service.updateTodo(todo);
+        int id = todo.getId();
+        todo.setUser(null);
+        todo.setTodo(todoText.getText().toString());
+        todo.setDone(null);
+        todo.setId(null);
+        todo.setUser(null);
+        Call<Envelope<Todo>> updateTodo = service.updateTodo(Integer.toString(id), todo);
         updateTodo.enqueue(new Callback<Envelope<Todo>>() {
             @Override
             public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {
