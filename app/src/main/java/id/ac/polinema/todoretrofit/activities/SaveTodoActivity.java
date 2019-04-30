@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import id.ac.polinema.todoretrofit.Constant;
@@ -38,16 +39,27 @@ public class SaveTodoActivity extends AppCompatActivity {
             }
             requestCode = extras.getInt(Constant.KEY_REQUEST_CODE);
         }
+
+        // Capture our button from layout
+        Button button = findViewById(R.id.button_save);
+        // Register the onClick listener with the implementation above
+        button.setOnClickListener(handleSave);
     }
 
-    public void handleSave(View view) {
-        switch (requestCode) {
-            case Constant.ADD_TODO: handleAdd(view);
-                break;
-            case Constant.UPDATE_TODO: handleUpdate(view);
-                break;
+    private View.OnClickListener handleSave = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+//            public void handleSave(View view) {
+                switch (requestCode) {
+                    case Constant.ADD_TODO: handleAdd(view);
+                        break;
+                    case Constant.UPDATE_TODO: handleUpdate(view);
+                        break;
+                }
+//            }
         }
-    }
+    };
+
 
     private void handleAdd(View view) {
         todo = new Todo();
@@ -80,7 +92,9 @@ public class SaveTodoActivity extends AppCompatActivity {
         todo.setDone(null);
         todo.setId(null);
         todo.setUser(null);
+
         Call<Envelope<Todo>> updateTodo = service.updateTodo(Integer.toString(id), todo);
+
         updateTodo.enqueue(new Callback<Envelope<Todo>>() {
             @Override
             public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {

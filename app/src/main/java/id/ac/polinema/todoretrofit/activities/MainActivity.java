@@ -106,10 +106,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if (id == R.id.action_logout) {
+        if (id == R.id.action_logout) {
             session.removeSession();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
