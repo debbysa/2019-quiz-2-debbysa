@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -45,6 +46,11 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Todo todo = items.get(i);
         viewHolder.bind(todo, listener);
+        if(todo.getDone() == true){
+            viewHolder.image.setImageResource(R.drawable.check);
+        } else {
+            viewHolder.image.setImageResource(R.drawable.check_empty);
+        }
     }
 
     @Override
@@ -54,9 +60,11 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView todoText;
+        ImageView image;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             todoText = itemView.findViewById(R.id.text_todo);
+            image = itemView.findViewById ( R.id.imageView );
         }
 
         public void bind(final Todo todo, final OnTodoClickedListener listener) {

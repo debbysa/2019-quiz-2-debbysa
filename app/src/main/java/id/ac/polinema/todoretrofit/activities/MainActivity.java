@@ -11,9 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -91,6 +93,25 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
         });
     }
 
+    private void handleDelete(Todo todo) {
+
+        int id = todo.getId();
+        Call<Envelope<Todo>> deleteTodo = service.deleteTodo(Integer.toString(id));
+        deleteTodo.enqueue(new Callback<Envelope<Todo>>() {
+            @Override
+            public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {
+                if (response.code() == 200) {
+                    loadTodos();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Envelope<Todo>> call, Throwable t) {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -119,10 +140,11 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
 
     @Override
     public void onClick(Todo todo) {
-        Intent intent = new Intent(this, SaveTodoActivity.class);
-        intent.putExtra(Constant.KEY_TODO, todo);
-        intent.putExtra(Constant.KEY_REQUEST_CODE, Constant.UPDATE_TODO);
-        startActivityForResult(intent, Constant.UPDATE_TODO);
+//        Intent intent = new Intent(this, SaveTodoActivity.class);
+//        intent.putExtra(Constant.KEY_TODO, todo);
+//        intent.putExtra(Constant.KEY_REQUEST_CODE, Constant.UPDATE_TODO);
+//        startActivityForResult(intent, Constant.UPDATE_TODO);
+        handleDelete(todo);
     }
 
     @Override
@@ -131,5 +153,25 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
         if (resultCode == RESULT_OK) {
             loadTodos();
         }
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+
+        if(menuItem.getItemId() == R.id.deleteContextMenuId){
+            for(String i : selectList){
+                db.delete(i);
+                arrayAdapter.remove(i);
+                Toast.makeText(getApplicationContext(),count+" item Deleted",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(intent);
+            }
+            arrayAdapter.notifyDataSetChanged();
+            actionMode.finish();
+            count = 0;
+        }
+        return true;
     }
 }
