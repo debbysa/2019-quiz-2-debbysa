@@ -40,7 +40,7 @@
 ![create](image/create.jpeg)
 
 
-- Create berhasil :
+- Create berhasil 
 ![create-berhasil](image/create_berhasil.jpeg)
 
 
@@ -62,10 +62,10 @@
 ## Halaman Update
 ![update](image/update.jpeg)
 
-- data dirubah menjadi :
+- data dirubah menjadi 
 ![update2](image/update2.jpeg)
 
-- update berhasil :
+- update berhasil 
 ![update-berhasil](image/update_berhasil.jpeg)
 
 
