@@ -101,17 +101,6 @@
                         android:background="#d5d5d5" />
 
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="right"-->
-                        <!--android:layout_marginTop="17.3dp"-->
-                        <!--android:layout_marginRight="44.3dp"-->
-                        <!--android:text="Forgot Password?"-->
-                        <!--android:textColor="#d5d5d5"-->
-                        <!--android:textSize="12.3sp" />-->
-
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -202,6 +191,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:gravity="center_horizontal"
+                    android:textStyle="bold"
                     android:text="create one"
                     android:onClick="handleRegister"
                     android:textColor="#ffffff"
