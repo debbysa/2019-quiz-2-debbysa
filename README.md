@@ -17,3 +17,58 @@
 
 ### Halaman awal Login
 ![login](image/login.jpeg)
+
+
+
+## Halaman Register
+![register](image/register.jpeg)
+
+
+
+## Halaman Todo
+- Ketika item Todo di klik
+![item-clicked](image/item_clicked.jpeg)
+
+
+- Ketika item Todo selesai di klik
+![item-undone](image/item_undone.jpeg)
+
+
+
+## Tampilan Create Data
+- menambahkan data
+![create](image/create.jpeg)
+
+
+- Create berhasil :
+![create-berhasil](image/create_berhasil.jpeg)
+
+
+
+## Tampilan Menu pada item
+![menu-item](image/menu_item.jpeg)
+
+
+
+## Konfirmasi Delete
+![delete](image/delete.jpeg)
+
+
+- jika delete berhasil
+![delete-berhasil](image/delete_berhasil.jpeg)
+
+
+
+## Halaman Update
+![update](image/update.jpeg)
+
+- data dirubah menjadi :
+![update2](image/update2.jpeg)
+
+- update berhasil :
+![update-berhasil](image/update_berhasil.jpeg)
+
+
+
+## Log out
+![logout](image/logout.jpeg)
