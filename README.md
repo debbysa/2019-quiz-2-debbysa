@@ -30,7 +30,7 @@
 ![item-clicked](image/item_clicked.jpeg)
 
 
-- Ketika item Todo selesai di klik
+- Ketika item Todo yang sudah selesai di klik
 ![item-undone](image/item_undone.jpeg)
 
 
