@@ -15,6 +15,8 @@ import android.view.ActionMode;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -35,12 +37,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTodoClickedListener {
+public class MainActivity extends AppCompatActivity implements TodoAdapter.AdapterCallback, SearchView.OnQueryTextListener {
 
     private RecyclerView todosRecyclerView;
     private Session session;
     private TodoService service;
     private TodoAdapter adapter;
+
+    public EditText todoText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
         todosRecyclerView = findViewById(R.id.rv_todos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         todosRecyclerView.setLayoutManager(layoutManager);
-        adapter = new TodoAdapter(this, this);
+        adapter = new TodoAdapter(this);
         todosRecyclerView.setAdapter(adapter);
         service = ServiceGenerator.createService(TodoService.class);
         loadTodos();
@@ -93,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
         });
     }
 
-    private void handleDelete(Todo todo) {
+    public void onDeleteMenuClick(Todo todo) {
 
         int id = todo.getId();
         Call<Envelope<Todo>> deleteTodo = service.deleteTodo(Integer.toString(id));
@@ -102,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
             public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {
                 if (response.code() == 200) {
                     loadTodos();
+                    Toast.makeText(MainActivity.this, "Delete Berhasil!",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Delete Gagal", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -116,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -138,13 +150,60 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
         return super.onOptionsItemSelected(item);
     }
 
+    public void onUpdateMenuClick(Todo todo) {
+        Intent intent = new Intent(this, SaveTodoActivity.class);
+        intent.putExtra(Constant.KEY_TODO, todo);
+        intent.putExtra(Constant.KEY_REQUEST_CODE, Constant.UPDATE_TODO);
+        startActivityForResult(intent, Constant.UPDATE_TODO);
+    }
+
     @Override
-    public void onClick(Todo todo) {
-//        Intent intent = new Intent(this, SaveTodoActivity.class);
-//        intent.putExtra(Constant.KEY_TODO, todo);
-//        intent.putExtra(Constant.KEY_REQUEST_CODE, Constant.UPDATE_TODO);
-//        startActivityForResult(intent, Constant.UPDATE_TODO);
-        handleDelete(todo);
+    public void onClickItem(Todo todo) {
+        int id = todo.getId();
+        todo.setUser(null);
+        todo.setId(null);
+        todo.setUser(null);
+
+        if(todo.getDone() == false){
+            todo.getDone();
+            todo.setDone(true);
+            Call<Envelope<Todo>> updateTodo = service.addDone(Integer.toString(id), todo);
+
+            updateTodo.enqueue(new Callback<Envelope<Todo>>() {
+                @Override
+                public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(MainActivity.this, "Tugas Selesai!", Toast.LENGTH_SHORT).show();
+                        loadTodos();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Envelope<Todo>> call, Throwable t) {
+
+                }
+            });
+        } else if (todo.getDone() == true){
+            todo.setDone(false);
+
+            Call<Envelope<Todo>> updateTodo = service.unDone(Integer.toString(id), todo);
+
+            updateTodo.enqueue(new Callback<Envelope<Todo>>() {
+                @Override
+                public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(MainActivity.this, "Tugas Belum selesai!", Toast.LENGTH_SHORT).show();
+                        loadTodos();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Envelope<Todo>> call, Throwable t) {
+
+                }
+            });
+        }
+
     }
 
     @Override
@@ -156,22 +215,12 @@ public class MainActivity extends AppCompatActivity implements TodoAdapter.OnTod
     }
 
     @Override
-    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-        if(menuItem.getItemId() == R.id.deleteContextMenuId){
-            for(String i : selectList){
-                db.delete(i);
-                arrayAdapter.remove(i);
-                Toast.makeText(getApplicationContext(),count+" item Deleted",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this,MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
-                startActivity(intent);
-            }
-            arrayAdapter.notifyDataSetChanged();
-            actionMode.finish();
-            count = 0;
-        }
-        return true;
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

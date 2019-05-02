@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import id.ac.polinema.todoretrofit.Constant;
 import id.ac.polinema.todoretrofit.R;
@@ -19,7 +20,7 @@ import retrofit2.Response;
 
 public class SaveTodoActivity extends AppCompatActivity {
 
-    private EditText todoText;
+    public EditText todoText;
 
     private TodoService service;
     private Todo todo;
@@ -89,6 +90,7 @@ public class SaveTodoActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Envelope<Todo>> call, Response<Envelope<Todo>> response) {
                 if (response.code() == 200) {
+                    Toast.makeText(SaveTodoActivity.this, "Update Berhasil!", Toast.LENGTH_SHORT).show();
                     Envelope<Todo> okResponse = response.body();
                     Todo data = okResponse.getData();
                     Intent intent = new Intent();

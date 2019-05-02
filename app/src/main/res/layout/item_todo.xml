@@ -31,8 +31,19 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:id="@+id/textViewOptions"
+            android:layout_width="20pt"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="3dp"
+            android:text="&#8942;"
+            android:textAlignment="center"
+            android:textSize="10pt" />
 
 
     </RelativeLayout>
